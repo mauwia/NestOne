@@ -20,7 +20,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       return user;
     }
     catch (err) {
-      console.log(err)
+      throw err
     }
   }
 }

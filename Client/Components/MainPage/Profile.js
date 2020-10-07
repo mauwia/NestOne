@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { View ,Text,TouchableOpacity,StyleSheet,Image,ScrollView} from 'react-native'
+import { View ,Text,TouchableOpacity,StyleSheet,Image,ScrollView, ActivityIndicator} from 'react-native'
 // import { color } from 'react-native-reanimated'
 // import AsyncStorage from '@react-native-community/async-storage'
 import SecureStorage from 'react-native-secure-storage'
 import Valley from './card.jpg'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch,useSelector,shallowEqual } from 'react-redux'
-import { userPosts } from '../../Action'
+import { Hit, userPosts } from '../../Action'
 import defaultAvatar from '../Auth/default.png' 
 import { color } from 'react-native-reanimated'
 
@@ -14,20 +14,22 @@ export const Profile=({navigation})=>{
     let dispatch=useDispatch()
     let [profile,setProfile]=useState({})
     const {list}=useSelector(state=>({list:Object.values(state.user).reverse()}),shallowEqual)
-    console.log(list)
+    // console.log(list)
     useEffect(()=>{
         const fetchPro=async()=>{
-
+            dispatch(Hit())
             let profile1=await SecureStorage.getItem("accessToken")
             // console.log("PROFILE" , profile)
             profile1=JSON.parse(profile1)
             setProfile({...profile1})
           
             await dispatch(userPosts())
+            dispatch(Hit())
             
         }
        fetchPro()
     },[])
+    const hit=useSelector(state=>state.hit)
     // console.log(profile)
     return<ScrollView><View style={styles.Parent3} >
         <View style={styles.ProfilDra}>
@@ -52,14 +54,18 @@ export const Profile=({navigation})=>{
     </View>
     <View>
 
-    </View>{
+    </View>
+
+        {!list &&<View style={styles.card}><Text  style={{marginTop:20,color:'#008B8B',marginLeft:20}}>Loading</Text></View>}
+    {
+        
         list.map(post=>{
-            return<View style={styles.card}>
+            return<View style={styles.card} key={post._id}>
             <View style={{flexDirection:'row'}}>
             <Image source={{uri:`${post.userId.imagelink}`}} style={styles.cardImage}></Image>
             <Text style={{marginTop:20,color:'#008B8B',marginLeft:9}}>{post.userId.username}</Text>
             </View>
-            <Text style={styles.Caption}>{post.caption}</Text>
+            {post.caption !='none'&& <Text style={styles.Caption}>{post.caption}</Text>}
             <View style={styles.uploadImageParent}>
             <Image source={Valley} style={styles.uploadImage}/>
             </View>

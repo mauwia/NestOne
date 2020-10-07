@@ -1,17 +1,34 @@
-import React, { useState } from 'react'
-import { Text,Navigator,View,StyleSheet, TextInput,Button, TouchableOpacity} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Text,Navigator,View,StyleSheet, TextInput,Button, TouchableOpacity, ActivityIndicator} from 'react-native'
+import SecureStorage from 'react-native-secure-storage'
 import { exp } from 'react-native/Libraries/Animated/src/Easing'
-import { useDispatch } from 'react-redux'
-import { Loginin } from '../../Action'
+import { useDispatch,useSelector } from 'react-redux'
+import { Hit, Loginin } from '../../Action'
 
 export const Login =({navigation})=>{
     let dispatch=useDispatch()
+    let [pas,setpass]=useState(false)
     let [username,setUsername]=useState('Mohammad')
     let [password,setPassword]=useState('123456789')
+    const hit=useSelector(state=>state.hit)
     const onPress1=async()=>{
+        dispatch(Hit())
+        try{
         await dispatch(Loginin(username,password))
+        dispatch(Hit())
         navigation.push('Home')
+    }catch(err){
+        setpass(true)
+        dispatch(Hit())
     }
+    }
+    useEffect(()=>{
+        const fetchProfile=async ()=>{
+            await console.log('123',SecureStorage.getItem('AccessToken'))
+        }
+    },[])
+
+    console.log('hit',hit)
     return<>
        <View style={styles.Header1}>
             <Text style={styles.TextHeader}>Nest One</Text>
@@ -21,10 +38,13 @@ export const Login =({navigation})=>{
             <Text style={{marginLeft:15,padding:10}}>Enter Name and Password For Login </Text>
             <TextInput style={styles.username} placeholder='Username'onChangeText={val=>setUsername(val)} value={username}/>
             <TextInput secureTextEntry={true} style={styles.username} value={password} onChangeText={val=>setPassword(val)} placeholder="Password"/>
-
-            <TouchableOpacity style={styles.Signup} onPress={()=>onPress1()} disabled={!username&&!password}>
+           { pas && <Text style={{color:'red'}}>Invalid Credentials</Text>}
+            {!hit && <TouchableOpacity style={styles.Signup} onPress={()=>onPress1()} >
                 <Text style={{color:'white'}}>Login</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
+            {hit && <TouchableOpacity style={styles.Signup} disabled={true}  >
+                <Text style={{color:'white'}}>Loading</Text>
+            </TouchableOpacity>}
             <View style={styles.Login}>
             <Text>Don't Have Account ? </Text>
             <TouchableOpacity onPress={()=>{navigation.push('SignUp')}}><Text style={{color:'blue'}} >Signup</Text></TouchableOpacity>

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { exp } from 'react-native/Libraries/Animated/src/Easing'
 import SecureStorage from 'react-native-secure-storage'
 export const SignUp =async details=>{
-    const body = {
+    try{const body = {
         email:details.email,
         username:details.username,
         password:details.password,
@@ -12,19 +12,25 @@ export const SignUp =async details=>{
         status:details.status,
         imagelink:details.imagelink
     }
-        console.log(body)
+        // console.log(body)
         let res = await axios.post(`${api}/auth/signup`,body)
-        return res.data
+        return res.data}
+
+        catch(err){
+            throw err
+        }
 }
 export const LoginIn=async (username,password)=>{
 
-    // console.log('hellp')
+   try{ // console.log('hellp')
     let res=await axios.post(`${api}/auth/signin`,{username,password})
     // console.log('===>',res.data)
-    
     await SecureStorage.setItem('accessToken',JSON.stringify(res.data))
-    // await console.log(AsyncStorage.getItem("accessToken"))   
     return res.data
+}
+    catch(err){
+        throw err
+    }
     
 }
 export const Profile=async ()=>{

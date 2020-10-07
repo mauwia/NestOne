@@ -10,32 +10,58 @@ export const Empass=(empass)=>{
     }
 }
 export const details=(details)=>async (dispatch,getState)=>{
+    try{
     let res=getState().signup
     let data=await SignUp({...res,...details})
     dispatch({type:'SIGN_UP',payload:data})
+}catch(err){
+    throw err
+}
 }
 export const Loginin=(username,password)=>async dispatch=>{
-    console.log('hello2')
+    // console.log('hello2')
+    try{
     let data=await LoginIn(username,password)
-    // console.log(data)
-    dispatch({type:"LOGIN_IN",payload:data})
+    dispatch({type:"LOGIN_IN",payload:data})}
+    catch(err){
+        throw err
+    }
+   
 }
 export const addPost=(details)=>async dispatch=>{
     // console.log('hello')
     let name=await SecureStorage.getItem("accessToken")
     name=JSON.parse(name)
-    console.log(name.imagelink)
+    // console.log(name.imagelink)
     let data=await AddPost({...details,username:name._id})
-    console.log(data)
+    // console.log(data)
     dispatch({type:"ADD_POST",payload:{...data,userId:{imagelink:name.imagelink,username:name.username}}})
 }
 export const getPosts=()=>async dispatch=>{
+    // console.log('work')
     let data=await GetPosts()
+    // console.log(data)
     dispatch({type:"GET_POSTS",payload:data})
 }
 export const userPosts=()=>async dispatch=>{
     let name=await SecureStorage.getItem("accessToken")
     name=JSON.parse(name)
+    // console.log('===>')
     let data = await GetUserPosts(name._id)
     dispatch({type:'USER_POSTS',payload:data})
+}
+export const UserAccess=()=>async dispatch=>{
+    let name=await SecureStorage.getItem("accessToken")
+    name=JSON.parse(name)
+    dispatch({type:'USER_LOAD',payload:name})
+}
+export const Hit=()=>{
+    return{
+        type:"HIT"
+    }
+}
+export const Logout=()=>async dispatch=>{
+    console.log('hll')
+    await SecureStorage.removeItem("accessToken")
+    dispatch({type:"LOGOUT"})
 }

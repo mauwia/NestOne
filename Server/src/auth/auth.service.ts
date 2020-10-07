@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException,NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose'
 import * as bcrypt from 'bcrypt'
 import { Model } from 'mongoose'
@@ -32,7 +32,7 @@ export class AuthService {
         return {
             accessToken: this.jwtService.sign(payload),username:user.username,email:user.email,status:user.status,imagelink:user.imagelink,_id:user.id
         }}catch(err){
-            console.log(err)
+            throw err
         }
     }
     async validateUser(username: string, pass: string): Promise<User> {
@@ -40,15 +40,17 @@ export class AuthService {
         const user = await this.userModel.findOne({ username })
         console.log(user)
         if (!user) {
-            return null
+           throw new NotFoundException("USER NOT FOUND")
         }
         const valid = await bcrypt.compare(pass, user.password)
         if (valid) {
 
             return user
         }
-        return null}catch(err){
-            console.log('error',err)
+        throw new NotFoundException("Incorrect Password")
+    }
+        catch(err){
+            throw err
         }
     }
 }

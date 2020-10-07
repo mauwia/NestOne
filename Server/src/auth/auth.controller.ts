@@ -17,10 +17,11 @@ export class AuthController {
     @Post('signin')
     async signIn(@Request() req){
         try{
-            return this.authservice.signIn(req.user)
+            let user= await this.authservice.signIn(req.user)
+           return user
         }
         catch (err) {
-            console.log("ERR in controller" , err)
+            return err
         }
     }
     @UseGuards(JwtAuthGuard)

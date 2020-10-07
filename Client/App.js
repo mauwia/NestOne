@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {applyMiddleware, compose, createStore} from 'redux'
 import reduxThunk from 'redux-thunk'
-import {Provider} from 'react-redux'
+import {Provider, useDispatch, useSelector} from 'react-redux'
 import Reducers from './Reducers';
 import SecureStorage from 'react-native-secure-storage'
 
@@ -20,37 +20,19 @@ import { Signup } from './Components/Auth/SignUp';
 import { Login } from './Components/Auth/Login';
 import { Form } from './Components/Auth/Form';
 import { MainPage } from './Components/MainPage/MainPage';
+import { UserAccess } from './Action';
+import Wrapper from './Wrapper';
 
 
 
 const Stack=createStackNavigator()
 const App: () => React$Node = () => {
-  let [isSign,setSign]=useState(false)
-  useEffect(()=>{
-    const fetchProfile=async()=>{
-      let accessToken=await SecureStorage.getItem("accessToken")
-      if(accessToken){
-        setSign(true)
-      }
-  }
-  fetchProfile()
-  },[])
-  // console.log(isSign)
-  let thus=true
+
   return (
     <Provider store={createStore(Reducers,compose(applyMiddleware(reduxThunk)))}>
       <StatusBar barStyle="dark-content" />
       <NavigationContainer>
-     {!isSign? (
-      <Stack.Navigator initialRouteName={'SignUp'} screenOptions={{headerShown:false}}>
-          <Stack.Screen name="SignUp" component={Signup} />
-          <Stack.Screen name='Home' component={MainPage}/>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name='Form' component={Form} />
-      </Stack.Navigator>):(<Stack.Navigator initialRouteName={'Home'} screenOptions={{headerShown:false}}>
-          <Stack.Screen name='Home' component={MainPage}/>
-      </Stack.Navigator>)
-      }
+        <Wrapper/>
       </NavigationContainer>
     </Provider>
   );

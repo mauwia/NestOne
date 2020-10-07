@@ -7,9 +7,17 @@ export const Signup =({navigation})=>{
 
     let [email,setEmail]=useState('')
     let [password,setPassword]=useState('')
+    let [pas,setpass]=useState(false)
     let onPress1=()=>{
-        navigation.push('Form')
+        if(password.length>=9)
+        {
+            // console.log('Valid')
+            navigation.push('Form')
         dispatch(Empass({email,password}))
+    }
+        else
+        setpass(true)
+        // alert('Password should be greater than 8')
     }
 return<KeyboardAvoidingView style={{flex:1}} behavior="height">
        <View style={styles.Header1}>
@@ -20,7 +28,7 @@ return<KeyboardAvoidingView style={{flex:1}} behavior="height">
             <Text style={{marginLeft:15,padding:10}}>Enter Email and Password </Text>
             <TextInput style={styles.username} onChangeText={value=>setEmail(value)} value={email} placeholder='Email'/>
             <TextInput secureTextEntry={true} style={styles.username} onChangeText={value=>setPassword(value)} value={password} placeholder="Password"/>
-
+           { pas && <Text style={{color:'red'}}>Should be greater than 8</Text>}
             <TouchableOpacity style={styles.Signup} disabled={!email && !password} onPress={()=>{onPress1()}}>
                 <Text style={{color:'white'}}>Sign Up</Text>
             </TouchableOpacity>

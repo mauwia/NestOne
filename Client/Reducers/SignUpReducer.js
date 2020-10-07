@@ -6,8 +6,11 @@ export default (state={},action)=>{
             console.log(action)
             return{...action.payload}
         case "LOGIN_IN":
-            // console.log(action)
             return{...action.payload}
+        case "USER_LOAD":
+            return {...action.payload}
+        case "LOGOUT":
+            return {}
         default:
             return state
     }

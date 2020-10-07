@@ -3,11 +3,12 @@ import {Text,View,Image,ActivityIndicator,StyleSheet} from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import defaultAvatar from './default.png'
 import ImagePicker from 'react-native-image-picker'
-import {useDispatch} from 'react-redux'
-import {details} from '../../Action'
+import {useDispatch, useSelector} from 'react-redux'
+import {details, Hit} from '../../Action'
 // import imagetobase64 from 'image-to-base64'
 import ImgToBase64 from 'react-native-image-base64'
 import Axios from 'axios'
+import { set } from 'lodash'
 
 export const Form =({navigation})=>{
     const cloudnaryUpload=async (photo)=>{
@@ -31,15 +32,25 @@ export const Form =({navigation})=>{
     }
     const dispatch=useDispatch()
     let onPress1=async ()=>{
-        const source={
+        try{if(fullname.length && username.length && status.length)
+        {const source={
             uri:avatar.uri,type:avatar.type,name:avatar.name
         }
         await cloudnaryUpload(source)
-        dispatch(details({username,fullname,status,imagelink:avatar.uri}))
-
+        dispatch(Hit())
+        await dispatch(details({username,fullname,status,imagelink:avatar.uri}))
+        dispatch(Hit())
         navigation.push('Login')
-
+    }else{
+        setpass(true)
     }
+        }catch(err){
+            dispatch(Hit())
+            navigation.push('SignUp')
+        }
+    }
+    let [pas,setpass]=useState(false)
+    const hit=useSelector(state=>state.hit)
     const [avatar,setAvatar]=useState(defaultAvatar)
     const [fullname,setfullname]=useState('')
     const [username,setUsername]=useState('')
@@ -64,7 +75,9 @@ export const Form =({navigation})=>{
         <TextInput placeholder='Full Name' onChangeText={value=>setfullname(value)} value={fullname} style={styles.TextInput2}/>
         <TextInput placeholder='Username' onChangeText={value=>setUsername(value)} value={username} style={styles.TextInput2} />
         <TextInput placeholder='Status' onChangeText={value=>setstatus(value)} value={status}  style={styles.TextInput2} />
-        <TouchableOpacity onPress={()=>onPress1()} style={styles.Submission}><Text style={{color:'white'}}>Submit</Text></TouchableOpacity>
+        { pas && <Text style={{color:'red'}}>Give Complete And Correct Information</Text>}
+        {!hit && <TouchableOpacity onPress={()=>onPress1()} style={styles.Submission}><Text style={{color:'white'}}>Submit</Text></TouchableOpacity>}
+        {hit && <ActivityIndicator style={{color:'purple'}}/>}
         </View>
     </>
 

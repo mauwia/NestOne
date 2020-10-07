@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react'
-import { View,Text,TouchableOpacity,StyleSheet,Image, ScrollView } from 'react-native'
+import { View,Text,TouchableOpacity,StyleSheet,Image, ScrollView ,ActivityIndicator} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import SecureStorage from 'react-native-secure-storage'
@@ -23,7 +23,6 @@ export const Dashboard=({navigation})=>{
                 setAvatar(defaultAvatar)
             }
             else{
-            console.log(response.uri,response.type,response.fileName)
             setAvatar(response.uri)
             
         }
@@ -35,16 +34,17 @@ export const Dashboard=({navigation})=>{
         // }
         let name=await SecureStorage.getItem("accessToken")
         name=JSON.parse(name)
-        console.log('hello')
-        dispatch(addPost({caption:caption,imagelink:avatar?avatar:'none',userId:name._id}))
+       
+        dispatch(addPost({caption:caption?caption:'none',imagelink:avatar?avatar:'none',userId:name._id}))
         setCaption('')
         setAvatar(null)
     }
     const {list}=useSelector(state=>({list:Object.values(state.post).reverse()}),shallowEqual)
-    // console.log(list)
+
     useEffect(()=>{
         const fetchProfile=async()=>{
-            await dispatch(getPosts())
+        await dispatch(getPosts())
+      
         }
         fetchProfile()
     },[])
@@ -65,16 +65,18 @@ export const Dashboard=({navigation})=>{
             </TouchableOpacity>
             </View>
         </View>
+        
         <View>
+        {list.length===0 && <ActivityIndicator size='large' color='white'/>}
+            {/* {list.length===0 &&  <ActivityIndicator size='large' color='white'/>} */}
             {
                 list.map(post=>{
-                    console.log(post.imagelink)
                     return<View style={styles.card} key={post._id}>
                 <View style={{flexDirection:'row'}}>
                 <Image source={{uri:`${post.userId.imagelink}`}} style={styles.cardImage}></Image>
                 <Text style={{marginTop:20,color:'#008B8B',marginLeft:9}}>{post.userId.username}</Text>
                 </View>
-                <Text style={styles.Caption}>{post.caption}</Text>
+                {post.caption !='none'&& <Text style={styles.Caption}>{post.caption}</Text>}
                 <View style={styles.uploadImageParent}>
                 <Image source={Valley} style={styles.uploadImage}/>
                 </View>
