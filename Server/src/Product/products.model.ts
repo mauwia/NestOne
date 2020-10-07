@@ -1,14 +1,16 @@
 import * as mongoose  from 'mongoose'
 
-export const ProductsSchema=new mongoose.Schema({   
-    title:{type:String,required:true},
-    description:{type:String,required:true},
-    price:{type:Number,required:true}
+export const ProductsSchema=new mongoose.Schema({ 
+    userId:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},  
+    caption:{type:String,required:true},
+    imagelink:{type:String,required:true},
+    // username:{type:String,required:true},
 })
 
 export interface Products extends mongoose.Document{
+    userId:string;
     id:string;
-    title:string;
-    desc:string;
-    price:number; 
+    caption:string;
+    imagelink:string;
+    // username:string; 
 }

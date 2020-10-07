@@ -10,6 +10,8 @@ target 'nestone' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNSecureStorage', :path => '../node_modules/react-native-secure-storage'
+
   target 'nestoneTests' do
     inherit! :complete
     # Pods for testing

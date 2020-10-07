@@ -1,6 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text,Navigator,View,StyleSheet, TextInput,Button, TouchableOpacity} from 'react-native'
+import { exp } from 'react-native/Libraries/Animated/src/Easing'
+import { useDispatch } from 'react-redux'
+import { Loginin } from '../../Action'
+
 export const Login =({navigation})=>{
+    let dispatch=useDispatch()
+    let [username,setUsername]=useState('Mohammad')
+    let [password,setPassword]=useState('123456789')
+    const onPress1=async()=>{
+        await dispatch(Loginin(username,password))
+        navigation.push('Home')
+    }
     return<>
        <View style={styles.Header1}>
             <Text style={styles.TextHeader}>Nest One</Text>
@@ -8,10 +19,10 @@ export const Login =({navigation})=>{
             <View style={styles.Parent} >
             <Text style={{marginLeft:15,padding:20,fontSize:25,fontWeight:"normal"}}>Login Account</Text>
             <Text style={{marginLeft:15,padding:10}}>Enter Name and Password For Login </Text>
-            <TextInput style={styles.username} placeholder='Email'/>
-            <TextInput secureTextEntry={true} style={styles.username} placeholder="Password"/>
+            <TextInput style={styles.username} placeholder='Username'onChangeText={val=>setUsername(val)} value={username}/>
+            <TextInput secureTextEntry={true} style={styles.username} value={password} onChangeText={val=>setPassword(val)} placeholder="Password"/>
 
-            <TouchableOpacity style={styles.Signup} onPress={()=>{navigation.push('Home')}}>
+            <TouchableOpacity style={styles.Signup} onPress={()=>onPress1()} disabled={!username&&!password}>
                 <Text style={{color:'white'}}>Login</Text>
             </TouchableOpacity>
             <View style={styles.Login}>

@@ -3,26 +3,68 @@ import {Text,View,Image,ActivityIndicator,StyleSheet} from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import defaultAvatar from './default.png'
 import ImagePicker from 'react-native-image-picker'
+import {useDispatch} from 'react-redux'
+import {details} from '../../Action'
+// import imagetobase64 from 'image-to-base64'
+import ImgToBase64 from 'react-native-image-base64'
+import Axios from 'axios'
 
-export const Form =()=>{
+export const Form =({navigation})=>{
+    const cloudnaryUpload=async (photo)=>{
+    //     let CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dk8xi5rcy/image/upload';
+    //     const data=new FormData()
+    //     data.append('file',photo)
+    //     data.append('upload_preset','Bazzz1999')
+    //     // data.append("cloud_name",'dk8xi5rcy')
+    //     try{
+    //     const config = {
+    //             headers: { "X-Requested-With": "XMLHttpRequest" },
+    //           };
+    //     let result=await Axios.post(CLOUDINARY_URL,data,config)
+    //     console.log(result)
+    //     }catch(err){
+    //         console.log(err)
+    //     }
+    // console.log(photo.uri)
+    // ImgToBase64.getBase64String(photo.uri).then(res=>setImage64(res))
+
+    }
+    const dispatch=useDispatch()
+    let onPress1=async ()=>{
+        const source={
+            uri:avatar.uri,type:avatar.type,name:avatar.name
+        }
+        await cloudnaryUpload(source)
+        dispatch(details({username,fullname,status,imagelink:avatar.uri}))
+
+        navigation.push('Login')
+
+    }
     const [avatar,setAvatar]=useState(defaultAvatar)
+    const [fullname,setfullname]=useState('')
+    const [username,setUsername]=useState('')
+    const [status,setstatus]=useState('')
+    const [image64,setImage64]=useState('')
     const handlePicker=()=>{
         ImagePicker.showImagePicker({},response=>{
             if(response.didCancel){
                 setAvatar(defaultAvatar)
             }
             else{
+            console.log(response.uri,response.type,response.fileName)
             setAvatar(response)
+            
         }
         })
     }
+    // console.log('hello')
     return<>
         <View style={styles.Parent1}>
         <TouchableOpacity onPress={()=>{handlePicker()}}><Image source={avatar}  style={styles.Image1} /></TouchableOpacity>
-        <TextInput placeholder='Full Name' style={styles.TextInput2}/>
-        <TextInput placeholder='Username' style={styles.TextInput2} />
-        <TextInput placeholder='Status' style={styles.TextInput2} />
-        <TouchableOpacity style={styles.Submission}><Text style={{color:'white'}}>Submit</Text></TouchableOpacity>
+        <TextInput placeholder='Full Name' onChangeText={value=>setfullname(value)} value={fullname} style={styles.TextInput2}/>
+        <TextInput placeholder='Username' onChangeText={value=>setUsername(value)} value={username} style={styles.TextInput2} />
+        <TextInput placeholder='Status' onChangeText={value=>setstatus(value)} value={status}  style={styles.TextInput2} />
+        <TouchableOpacity onPress={()=>onPress1()} style={styles.Submission}><Text style={{color:'white'}}>Submit</Text></TouchableOpacity>
         </View>
     </>
 

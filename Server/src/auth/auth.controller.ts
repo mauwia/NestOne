@@ -10,13 +10,18 @@ export class AuthController {
     constructor(private authservice:AuthService){}
     @Post('signup')
     async signup(
-        @Body(ValidationPipe) authCredentialsDto:AuthCredentialsDto):Promise<void>{
+        @Body(ValidationPipe) authCredentialsDto:AuthCredentialsDto):Promise<any>{
             return await this.authservice.signUp(authCredentialsDto);
         }
     @UseGuards(LocalAuthGuard)
     @Post('signin')
     async signIn(@Request() req){
-        return this.authservice.signIn(req.user)
+        try{
+            return this.authservice.signIn(req.user)
+        }
+        catch (err) {
+            console.log("ERR in controller" , err)
+        }
     }
     @UseGuards(JwtAuthGuard)
     @Get('me')

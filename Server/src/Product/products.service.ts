@@ -6,31 +6,33 @@ import { Model } from 'mongoose'
 export class ProductsServices{
     products: Products[]=[]
     constructor(@InjectModel('Product') private readonly productModel:Model<Products>){}
-    async insertProduct(title:string,desc:string,price:number){
+    async insertProduct(caption:string,imagelink:string,userId:string){
         // let id=(Math.floor(Math.random()*10)).toString()
         // console.log(title,desc)
-        const newProduct=new this.productModel({title,description:desc,price})
+        const newProduct=new this.productModel({caption,imagelink,userId})
          let result=await newProduct.save()
-        return result.id as string
-    }
+        return result 
+        }
     async allproducts(){
-        let products=await this.productModel.find().exec()
+        let products=await this.productModel.find().populate('userId',"username imagelink")
         return products as Products[]
+    }
+    async alluserposts(userId){
+        let userPosts=await this.productModel.find({userId}).populate('userId','username imagelink')
+        return userPosts
     }
     async singleProduct(prodid:string){
         let product=await this.findProduct(prodid)
         return product
     }
-    async updateProduct(prodid:string,title:string,desc:string,price:number){
+    async updateProduct(prodid:string,caption:string,imagelink:string){
         let updProd=await this.findProduct(prodid) 
         
-        if(title){
-            updProd.title=title
+        if(caption){
+            updProd.caption=caption
         }
-        if(desc){
-            updProd.desc=desc
-        }if(price){
-            updProd.price=price
+        if(imagelink){
+            updProd.imagelink=imagelink
         }
         await updProd.save()
         return updProd
@@ -43,7 +45,7 @@ export class ProductsServices{
     private async findProduct(id:string):Promise<Products>{
         let product
         try{
-         product= await this.productModel.findById(id)
+         product= await this.productModel.findById(id).populate('userId','username imagelink')
         }catch(err){
             throw new  NotFoundException("Could not find Exception")
         }
