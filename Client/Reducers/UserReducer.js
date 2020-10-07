@@ -1,8 +1,8 @@
 import _ from 'lodash'
-export default (state=false,action)=>{
+export default (state={},action)=>{
     switch(action.type){
-        case "Hit":
-            return !state 
+        case "USER_POSTS":
+            return{...state,..._.mapKeys(action.payload,'_id')}
         default:
             return state
     }
