@@ -50,10 +50,14 @@ export const getPosts=()=>async dispatch=>{
         throw err
     }
 }
-export const userPosts=()=>async dispatch=>{
-   try{ let name=await SecureStorage.getItem("accessToken")
-    name=JSON.parse(name)
+
+export const userPosts=()=>async (dispatch,getState)=>{
+   try{ 
+    // let name=await SecureStorage.getItem("accessToken")
+    // name=JSON.parse(name)
     // console.log('===>')
+    let name=getState().signup
+    console.log(name)
     let data = await GetUserPosts(name._id)
     dispatch({type:'USER_POSTS',payload:data})
 }catch(err){

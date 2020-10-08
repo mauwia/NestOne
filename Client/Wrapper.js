@@ -19,6 +19,8 @@ import { Combine } from './Components/Combine';
 import { Signup } from './Components/Auth/SignUp';
 import { Login } from './Components/Auth/Login';
 import { Form } from './Components/Auth/Form';
+import SplashScreen from 'react-native-splash-screen'
+
 import { MainPage } from './Components/MainPage/MainPage';
 import { UserAccess } from './Action';
 import { Profile } from './Components/MainPage/Profile';
@@ -33,11 +35,15 @@ export default Wrapper=()=>{
     let user=useSelector(state=>state.signup)
     useEffect(()=>{
       const fetchProfile=async()=>{
+         dispatch(UserAccess())  
         let profile=await SecureStorage.getItem('accessToken')
+
         console.log(profile)
         if(profile){
           setSign(true)
         }
+    SplashScreen.hide()
+
         
     }
     fetchProfile()
@@ -57,7 +63,7 @@ export default Wrapper=()=>{
             {/* <Stack.Screen name='Profile' component={Profile}/> */}
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name='Form' component={Form} />
-            {/* <Stack.Screen name="Signup" component={Signup} /> */}
+            {/* <Stack.Screen name="SignUp" component={Signup} /> */}
         </Stack.Navigator>)
         }
         {/* <Text>Hell</Text> */}

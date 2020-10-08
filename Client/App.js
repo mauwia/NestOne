@@ -27,7 +27,8 @@ import FlashMessage from 'react-native-flash-message';
 
 const Stack=createStackNavigator()
 const App: () => React$Node = () => {
-  
+  // useEffect(()=>{
+  // },[])
   return (
     <Provider store={createStore(Reducers,compose(applyMiddleware(reduxThunk)))}>
       <StatusBar barStyle="dark-content" />

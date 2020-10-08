@@ -5,6 +5,8 @@ export default (state={},action)=>{
             return {...state,[action.payload._id]:action.payload}
         case "GET_POSTS":
             return{...state,..._.mapKeys(action.payload,'_id')}
+        case "LOGOUT":
+                return {}
         default:
             return state
     }

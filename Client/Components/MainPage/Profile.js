@@ -29,7 +29,7 @@ export const Profile=({navigation})=>{
             
         }
        fetchPro()
-    },[isFocused])
+    },[])
     // console.log(profile)
     return<ScrollView><View style={styles.Parent3} >
         <View style={styles.ProfilDra}>
