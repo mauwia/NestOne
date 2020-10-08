@@ -3,6 +3,7 @@ import {Text,View,Image,ActivityIndicator,StyleSheet} from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import defaultAvatar from './default.png'
 import ImagePicker from 'react-native-image-picker'
+import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 import {details, Hit} from '../../Action'
 // import imagetobase64 from 'image-to-base64'
@@ -42,10 +43,21 @@ export const Form =({navigation})=>{
         dispatch(Hit())
         navigation.push('Login')
     }else{
-        setpass(true)
+        showMessage({
+            message:"Give Complete And Correct Info",
+            hideOnPress:true,
+            icon:'warning',
+            type:'warning'
+        })
     }
         }catch(err){
             dispatch(Hit())
+            showMessage({
+                message:"Invalid Credentials",
+                hideOnPress:true,
+                icon:'warning',
+                type:'warning'
+            })
             navigation.push('SignUp')
         }
     }
@@ -77,7 +89,7 @@ export const Form =({navigation})=>{
         <TextInput placeholder='Status' onChangeText={value=>setstatus(value)} value={status}  style={styles.TextInput2} />
         { pas && <Text style={{color:'red'}}>Give Complete And Correct Information</Text>}
         {!hit && <TouchableOpacity onPress={()=>onPress1()} style={styles.Submission}><Text style={{color:'white'}}>Submit</Text></TouchableOpacity>}
-        {hit && <ActivityIndicator style={{color:'purple'}}/>}
+        {hit && <TouchableOpacity disabled={true} style={styles.Submission}><Text style={{color:'white'}}>Loading...</Text></TouchableOpacity>}
         </View>
     </>
 

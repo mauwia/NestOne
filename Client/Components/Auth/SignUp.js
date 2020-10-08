@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import {useDispatch} from 'react-redux'
 import {Empass} from '../../Action'
-import { Text,Navigator,View,StyleSheet, TextInput,Button, TouchableOpacity, KeyboardAvoidingView} from 'react-native'
+import { Text,Navigator,View,StyleSheet, TextInput,Button, TouchableOpacity, KeyboardAvoidingView, Image} from 'react-native'
+import { showMessage } from 'react-native-flash-message'
+import logo from '../../assets/nestone.png'
 export const Signup =({navigation})=>{
     const dispatch=useDispatch()
 
@@ -16,13 +18,18 @@ export const Signup =({navigation})=>{
         dispatch(Empass({email,password}))
     }
         else
-        setpass(true)
-        // alert('Password should be greater than 8')
+        // setpass(true)
+        showMessage({
+            message:"Password should be greater than 9 ",
+            hideOnPress:true,
+            icon:'warning',
+            type:'warning'
+        })
     }
 return<KeyboardAvoidingView style={{flex:1}} behavior="height">
        <View style={styles.Header1}>
-            <Text style={styles.TextHeader}>Nest One</Text>
-
+            {/* <Text style={styles.TextHeader}>Nest One</Text> */}
+            <Image source={logo} style={styles.TextHeader}/>
             <View style={styles.Parent} >
             <Text style={{marginLeft:15,padding:20,fontSize:25,fontWeight:"normal"}}>Create Account</Text>
             <Text style={{marginLeft:15,padding:10}}>Enter Email and Password </Text>
@@ -48,16 +55,16 @@ const styles = StyleSheet.create({
         // alignItems:'flex-start'
     },
     Parent:{
-        marginTop:40,
+        // marginTop:40,
         flex:1,
         justifyContent:"flex-start",
         alignItems:'center'
     },
      TextHeader:{
-         color:"#3F3F3F",
-         fontSize:50,
-         marginLeft:20,
-         marginTop:30,
+        //  color:"#3F3F3F",
+        //  fontSize:50,
+        //  marginLeft:20,
+         marginTop:50,
          
          
      },

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text,StyleSheet,View } from 'react-native'
+import { Text,StyleSheet,View,Image } from 'react-native'
 import { createDrawerNavigator, DrawerContentScrollView,
     DrawerItemList,
     DrawerItem, } from '@react-navigation/drawer';
@@ -12,6 +12,8 @@ import {Login} from '../Auth/Login'
 import { color } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
 import { Logout } from '../../Action';
+import logo from '../../assets/nestone.png'
+
 let Drawer=createDrawerNavigator()
 export const MainPage=()=>{
     console.log('here')
@@ -35,18 +37,13 @@ function CustomDrawerContent(props) {
     return (
       <DrawerContentScrollView {...props}>
           <View style={styles.drawer1}>
-          <Text style={styles.headerdraw}>NEST ONE</Text>
+          {/* <Text style={styles.headerdraw}>NEST ONE</Text>
+           */}
+            <Image source={logo} style={styles.headerdraw}/>
+
           </View>
         <DrawerItemList {...props}  />
-        {/* <DrawerItem label={() => <Text style={{ color: 'white' }}>Dashboard</Text>}
-        style={{backgroundColor: '#008b8b',position:'relative',bottom:0}} 
-        inactiveBackgroundColor='white'
-        onPress={() => alert('Logged out')}
-      />
-      <DrawerItem label={() => <Text style={{ color: 'white' }}>Profile</Text>}
-        style={{backgroundColor: '#008b8b',position:'relative',bottom:0}} 
-        onPress={() => props.navigation.navigate('profile')}
-      /> */}
+    
         <DrawerItem label={() => <Text style={{ color: 'white' }}>Logout</Text>}
         style={{backgroundColor: 'red'}} 
         onPress={() => onPress1(props.navigation)}
@@ -59,9 +56,9 @@ const styles=StyleSheet.create({
         flex:1,
     },
     headerdraw:{
-        color:"#008b8b",
-        fontSize:30,
-        marginLeft:7,
+        // color:"#008b8b",
+        // fontSize:30,
+        marginLeft:40,
         marginTop:12,
         marginBottom:30
     }

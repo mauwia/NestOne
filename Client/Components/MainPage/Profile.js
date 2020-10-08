@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View ,Text,TouchableOpacity,StyleSheet,Image,ScrollView, ActivityIndicator} from 'react-native'
-// import { color } from 'react-native-reanimated'
-// import AsyncStorage from '@react-native-community/async-storage'
+import {useIsFocused} from '@react-navigation/native'
 import SecureStorage from 'react-native-secure-storage'
 import Valley from './card.jpg'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -11,9 +10,11 @@ import defaultAvatar from '../Auth/default.png'
 import { color } from 'react-native-reanimated'
 
 export const Profile=({navigation})=>{
+    const isFocused = useIsFocused();
     let dispatch=useDispatch()
     let [profile,setProfile]=useState({})
     const {list}=useSelector(state=>({list:Object.values(state.user).reverse()}),shallowEqual)
+    const hit=useSelector(state=>state.hit)
     // console.log(list)
     useEffect(()=>{
         const fetchPro=async()=>{
@@ -28,8 +29,7 @@ export const Profile=({navigation})=>{
             
         }
        fetchPro()
-    },[])
-    const hit=useSelector(state=>state.hit)
+    },[isFocused])
     // console.log(profile)
     return<ScrollView><View style={styles.Parent3} >
         <View style={styles.ProfilDra}>
@@ -52,11 +52,21 @@ export const Profile=({navigation})=>{
         </View>
        
     </View>
-    <View>
+   {hit && <View style={{...styles.Loaders,marginTop:70,}}>
+    <View style={{flexDirection:'row',justifyContent:'center'}}>
+            <ActivityIndicator size='large' color='3008b8b' style={{marginTop:10}}/>
+            </View>
+    </View>}
+    {!hit && list.length===0 && <View style={{...styles.Loaders,marginTop:70,}}>
+    <View style={{flexDirection:'row',justifyContent:'center'}}>
 
-    </View>
+            <Text style={{marginTop:10,color:'#008B8B',marginLeft:9}}>NO POST YET </Text>
+            </View>
+    </View>}
+    {/* {!hit && list.length>0 && <View style={{...styles.card,marginTop:70}}>
+ 
+    </View>} */}
 
-        {!list &&<View style={styles.card}><Text  style={{marginTop:20,color:'#008B8B',marginLeft:20}}>Loading</Text></View>}
     {
         
         list.map(post=>{
@@ -73,23 +83,17 @@ export const Profile=({navigation})=>{
         })
     
             }
-     {/* <View style={styles.postSec}>
-    <Text style={styles.pictureHeader}>PICTURES</Text>
-    <View style={styles.pictureGrp}>
-    <View style={{flex:1}}>
-    <Image source={defaultAvatar} style={styles.pictureImg}/></View>
-    <View style={{flex:1}}>
-    <Image source={defaultAvatar} style={styles.pictureImg}/></View>
-    <View style={{flex:1}}>
-    <Image source={defaultAvatar} style={styles.pictureImg}/></View>
-    
-    </View>
-    
-        </View> */}
     </ScrollView>
 }
 
 let styles=StyleSheet.create({
+    Loaders:{
+        marginTop:20,
+        borderRadius:10,
+        backgroundColor:'white',
+        margin:10,
+        paddingBottom:10,  
+    },
     Caption:{
         marginLeft:20,
         paddingBottom:20,
@@ -110,11 +114,13 @@ let styles=StyleSheet.create({
         // padding:40
     },
     card:{
-        marginTop:70,
+        position:'relative',
+        marginTop:20,
         borderRadius:10,
         backgroundColor:'white',
         margin:10,
-        paddingBottom:10
+        paddingBottom:10,
+        top:40
     },
     cardImage:{
         marginTop:10,

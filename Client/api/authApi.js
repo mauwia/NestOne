@@ -1,4 +1,4 @@
-const api='http://192.168.18.218:3000'
+const api='http://192.168.1.103:3000'
 // import AsyncStorage from '@react-native-community/async-storage'
 import axios from 'axios'
 import { exp } from 'react-native/Libraries/Animated/src/Easing'
@@ -22,10 +22,12 @@ export const SignUp =async details=>{
 }
 export const LoginIn=async (username,password)=>{
 
-   try{ // console.log('hellp')
+   try{
+    // console.log('hellp')
     let res=await axios.post(`${api}/auth/signin`,{username,password})
-    // console.log('===>',res.data)
+    // console.log('===>')
     await SecureStorage.setItem('accessToken',JSON.stringify(res.data))
+
     return res.data
 }
     catch(err){

@@ -14,7 +14,6 @@ import reduxThunk from 'redux-thunk'
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import Reducers from './Reducers';
 import SecureStorage from 'react-native-secure-storage'
-
 import { Combine } from './Components/Combine';
 import { Signup } from './Components/Auth/SignUp';
 import { Login } from './Components/Auth/Login';
@@ -22,17 +21,19 @@ import { Form } from './Components/Auth/Form';
 import { MainPage } from './Components/MainPage/MainPage';
 import { UserAccess } from './Action';
 import Wrapper from './Wrapper';
+import FlashMessage from 'react-native-flash-message';
 
 
 
 const Stack=createStackNavigator()
 const App: () => React$Node = () => {
-
+  
   return (
     <Provider store={createStore(Reducers,compose(applyMiddleware(reduxThunk)))}>
       <StatusBar barStyle="dark-content" />
       <NavigationContainer>
         <Wrapper/>
+        <FlashMessage position='top'/>
       </NavigationContainer>
     </Provider>
   );

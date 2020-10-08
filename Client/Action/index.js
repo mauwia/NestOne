@@ -29,26 +29,36 @@ export const Loginin=(username,password)=>async dispatch=>{
    
 }
 export const addPost=(details)=>async dispatch=>{
-    // console.log('hello')
+   try{ // console.log('hello')
     let name=await SecureStorage.getItem("accessToken")
     name=JSON.parse(name)
     // console.log(name.imagelink)
     let data=await AddPost({...details,username:name._id})
     // console.log(data)
     dispatch({type:"ADD_POST",payload:{...data,userId:{imagelink:name.imagelink,username:name.username}}})
+}catch(err){
+    throw err
+}
 }
 export const getPosts=()=>async dispatch=>{
+    try{
     // console.log('work')
     let data=await GetPosts()
     // console.log(data)
-    dispatch({type:"GET_POSTS",payload:data})
+    dispatch({type:"GET_POSTS",payload:data})}
+    catch(err){
+        throw err
+    }
 }
 export const userPosts=()=>async dispatch=>{
-    let name=await SecureStorage.getItem("accessToken")
+   try{ let name=await SecureStorage.getItem("accessToken")
     name=JSON.parse(name)
     // console.log('===>')
     let data = await GetUserPosts(name._id)
     dispatch({type:'USER_POSTS',payload:data})
+}catch(err){
+    throw err
+}
 }
 export const UserAccess=()=>async dispatch=>{
     let name=await SecureStorage.getItem("accessToken")
@@ -61,7 +71,7 @@ export const Hit=()=>{
     }
 }
 export const Logout=()=>async dispatch=>{
-    console.log('hll')
+    // console.log('hll')
     await SecureStorage.removeItem("accessToken")
     dispatch({type:"LOGOUT"})
 }

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Text,Navigator,View,StyleSheet, TextInput,Button, TouchableOpacity, ActivityIndicator} from 'react-native'
+import { Text,Navigator,View,StyleSheet, TextInput,Button, TouchableOpacity, ActivityIndicator, Image} from 'react-native'
 import SecureStorage from 'react-native-secure-storage'
+import {showMessage} from 'react-native-flash-message'
 import { exp } from 'react-native/Libraries/Animated/src/Easing'
 import { useDispatch,useSelector } from 'react-redux'
 import { Hit, Loginin } from '../../Action'
+import logo from '../../assets/nestone.png'
+
 
 export const Login =({navigation})=>{
     let dispatch=useDispatch()
@@ -18,21 +21,19 @@ export const Login =({navigation})=>{
         dispatch(Hit())
         navigation.push('Home')
     }catch(err){
-        setpass(true)
         dispatch(Hit())
+        showMessage({
+            message:"Invalid Credentials",
+            hideOnPress:true,
+            icon:'warning',
+            type:'warning'
+        })
     }
     }
-    useEffect(()=>{
-        const fetchProfile=async ()=>{
-            await console.log('123',SecureStorage.getItem('AccessToken'))
-        }
-    },[])
-
-    console.log('hit',hit)
     return<>
        <View style={styles.Header1}>
-            <Text style={styles.TextHeader}>Nest One</Text>
-
+            {/* <Text style={styles.TextHeader}>Nest One</Text> */}
+            <Image source={logo} style={styles.TextHeader}/>
             <View style={styles.Parent} >
             <Text style={{marginLeft:15,padding:20,fontSize:25,fontWeight:"normal"}}>Login Account</Text>
             <Text style={{marginLeft:15,padding:10}}>Enter Name and Password For Login </Text>
@@ -61,15 +62,15 @@ const styles = StyleSheet.create({
         // alignItems:'flex-start'
     },
     Parent:{
-        marginTop:40,
+        // marginTop:40,
         flex:1,
         justifyContent:"flex-start",
         alignItems:'center'
     },
      TextHeader:{
-         color:"#3F3F3F",
-         fontSize:50,
-         marginLeft:20,
+        //  color:"#3F3F3F",
+        //  fontSize:50,
+        //  marginLeft:20,
          marginTop:30,
          
          
