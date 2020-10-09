@@ -14,8 +14,8 @@ export const Signup =({navigation})=>{
         if(password.length>=9)
         {
             // console.log('Valid')
-            navigation.push('Form')
         dispatch(Empass({email,password}))
+            navigation.push('Form')
     }
         else
         // setpass(true)

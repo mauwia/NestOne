@@ -8,7 +8,7 @@ import ImagePicker from 'react-native-image-picker'
 import {GetPosts} from '../../api/postapi'
 import { useDispatch,useSelector,shallowEqual } from 'react-redux'
 import { addPost,getPosts, Hit } from '../../Action'
-
+import Axios from 'axios'
 import defaultImage from '../Auth/default.png'
 import Valley from './card.jpg'
 import { showMessage } from 'react-native-flash-message'
@@ -19,25 +19,58 @@ export const Dashboard=({navigation})=>{
     let dispatch=useDispatch()
     const [avatar,setAvatar]=useState('')
     const [caption,setCaption]=useState('')
+    const cloudnaryUpload = async (photo) => {
+        let CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dk8xi5rcy/upload';
+        let data = {
+            "file": photo,
+            "upload_preset": "Bazzz1999"
+        }
+
+        try {
+            const config = {
+                headers: { "content-type": "application/json" },
+            };
+            let result = await Axios.post(CLOUDINARY_URL, data, config)
+            return result.data
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     const handlePicker=()=>{
         ImagePicker.showImagePicker({},response=>{
             if(response.didCancel){
-                setAvatar(defaultAvatar.uri)
+
+                setAvatar('')
             }
             else{
-            setAvatar(response.uri)
-            
+                // console.log(response)
+                const source = "data:image/jpeg;base64," + response.data;
+            setAvatar(source)
+
         }
         })
     }
     const onPress1=async()=>{
         if(avatar || caption){
+       try{ 
+        dispatch(Hit())
         let name=await SecureStorage.getItem("accessToken")
         name=JSON.parse(name)
-       
-        dispatch(addPost({caption:caption?caption:'none',imagelink:avatar?avatar:'none',userId:name._id}))
+        let data=await cloudnaryUpload(avatar)
+        dispatch(addPost({caption:caption?caption:'none',imagelink:avatar?data.secure_url:'none',userId:name._id}))
         setCaption('')
         setAvatar('')
+        dispatch(Hit())
+    }catch(err){
+        dispatch(Hit())
+        showMessage({
+            message:"Internet Error",
+            hideOnPress:true,
+            icon:'warning',
+            type:'warning'
+        })
+    }
     }else{
         showMessage({
             message:"Add Post aur Picture",
@@ -52,10 +85,20 @@ export const Dashboard=({navigation})=>{
     const isFocused = useIsFocused();
     useEffect(()=>{
         const fetchProfile=async()=>{
+        try{
         dispatch(Hit())
         await dispatch(getPosts())
         dispatch(Hit())
-            
+           }catch(err){
+               showMessage({
+                message:"No Internet Connection",
+                hideOnPress:true,
+                icon:'warning',
+                type:'warning'
+               })
+            dispatch(Hit())
+
+           } 
         }
         fetchProfile()
     },[isFocused])
@@ -72,7 +115,7 @@ export const Dashboard=({navigation})=>{
             </TouchableOpacity>
             
             <TouchableOpacity style={{borderRadius:10,marginLeft:170,color:'white',padding:5}}>
-            <Text name='caret-square-right' style={{fontSize:15,color:'#008B8B'}} onPress={()=>onPress1()}>POST</Text>
+           {!hit && <Text name='caret-square-right' style={{fontSize:15,color:'#008B8B'}} onPress={()=>onPress1()}>POST</Text>}
             </TouchableOpacity>
             </View>
         </View>
@@ -84,15 +127,17 @@ export const Dashboard=({navigation})=>{
             {/* {list.length===0 &&  <ActivityIndicator size='large' color='white'/>} */}
             {
                 list.map(post=>{
+                // console.log(post.imagelink)
                     return<View style={styles.card} key={post._id}>
+
                 <View style={{flexDirection:'row'}}>
                 <Image source={{uri:`${post.userId.imagelink}`}} style={styles.cardImage}></Image>
                 <Text style={{marginTop:20,color:'#008B8B',marginLeft:9}}>{post.userId.username}</Text>
                 </View>
                 {post.caption !='none'&& <Text style={styles.Caption}>{post.caption}</Text>}
-                <View style={styles.uploadImageParent}>
-                <Image source={Valley} style={styles.uploadImage}/>
-                </View>
+                {post.imagelink!=='none'&&<Image source={{uri:`${post.imagelink}`}} style={styles.cardImage1}/>}
+                
+               
             </View>
                 })
             }    
@@ -134,6 +179,12 @@ let styles=StyleSheet.create({
         borderRadius:30,
         width:50,
         height:50
+    },
+    cardImage1:{
+        // marginTop:10,
+        // width:100,
+        alignSelf:'stretch',
+        height:500
     },
     status:{
         borderBottomWidth:1,

@@ -57,7 +57,7 @@ export const userPosts=()=>async (dispatch,getState)=>{
     // name=JSON.parse(name)
     // console.log('===>')
     let name=getState().signup
-    console.log(name)
+    // console.log(name)
     let data = await GetUserPosts(name._id)
     dispatch({type:'USER_POSTS',payload:data})
 }catch(err){

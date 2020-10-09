@@ -1,4 +1,4 @@
-const api='http://192.168.1.103:3000'
+const api='http://192.168.18.218:3000'
 // import AsyncStorage from '@react-native-community/async-storage'
 import axios from 'axios'
 import { exp } from 'react-native/Libraries/Animated/src/Easing'

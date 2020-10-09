@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch,useSelector,shallowEqual } from 'react-redux'
 import { Hit, userPosts } from '../../Action'
 import defaultAvatar from '../Auth/default.png' 
-import { color } from 'react-native-reanimated'
+import { Tabs } from './Image/Tabs'
 
 export const Profile=({navigation})=>{
     const isFocused = useIsFocused();
@@ -50,8 +50,10 @@ export const Profile=({navigation})=>{
             </View>
         </View>
         </View>
-       
-    </View>
+        </View>
+        <Tabs/>
+
+    {/* 
    {hit && <View style={{...styles.Loaders,marginTop:70,}}>
     <View style={{flexDirection:'row',justifyContent:'center'}}>
             <ActivityIndicator size='large' color='3008b8b' style={{marginTop:10}}/>
@@ -62,12 +64,12 @@ export const Profile=({navigation})=>{
 
             <Text style={{marginTop:10,color:'#008B8B',marginLeft:9}}>NO POST YET </Text>
             </View>
-    </View>}
+    </View>} */}
     {/* {!hit && list.length>0 && <View style={{...styles.card,marginTop:70}}>
  
     </View>} */}
 
-    {
+    {/* {
         
         list.map(post=>{
             return<View style={styles.card} key={post._id}>
@@ -82,8 +84,8 @@ export const Profile=({navigation})=>{
         </View>
         })
     
-            }
-    </ScrollView>
+            } */}
+     </ScrollView>
 }
 
 let styles=StyleSheet.create({
@@ -202,6 +204,7 @@ let styles=StyleSheet.create({
         flex:1,
         flexDirection:'row',
         alignItems:'flex-start',
+        marginBottom:52
     },
     IconPar:{
         alignSelf:'flex-start',      

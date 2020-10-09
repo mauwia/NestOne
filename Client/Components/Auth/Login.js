@@ -22,6 +22,7 @@ export const Login =({navigation})=>{
         navigation.push('Home')
     }catch(err){
         dispatch(Hit())
+        console.log(err)
         showMessage({
             message:"Invalid Credentials",
             hideOnPress:true,

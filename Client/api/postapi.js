@@ -1,6 +1,6 @@
 import Axios from "axios"
 
-const api='http://192.168.1.103:3000'
+const api='http://192.168.18.218:3000'
 
 export const AddPost=async detail=>{
     try{let res=await Axios.post(`${api}/post`,detail)

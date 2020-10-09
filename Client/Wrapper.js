@@ -24,6 +24,7 @@ import SplashScreen from 'react-native-splash-screen'
 import { MainPage } from './Components/MainPage/MainPage';
 import { UserAccess } from './Action';
 import { Profile } from './Components/MainPage/Profile';
+import Welcome from './Welcome';
 
 const Stack=createStackNavigator()
 const Loader=()=>{
@@ -53,7 +54,8 @@ export default Wrapper=()=>{
     return<>
 
      {!isSign? (
-        <Stack.Navigator initialRouteName={'SignUp'} screenOptions={{headerShown:false}}>
+        <Stack.Navigator initialRouteName={'Welcome'} screenOptions={{headerShown:false}}>
+            <Stack.Screen name='Welcome' component={Welcome}/>
             <Stack.Screen name="SignUp" component={Signup} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name='Home' component={MainPage}/>
