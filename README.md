@@ -10,8 +10,8 @@ To start server
 
 To start client 
 
-1)Open CMD in server Directory
-2)npm install
-3)npx react-native run-android
+1) Open CMD in server Directory
+2) npm install
+3) npx react-native run-android
 
 NOTE: Should hai android studio or mobile in development mode
