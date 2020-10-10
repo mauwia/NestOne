@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {useDispatch} from 'react-redux'
 import {Empass} from '../../Action'
-import { Text,Navigator,View,StyleSheet, TextInput,Button, TouchableOpacity, KeyboardAvoidingView, Image} from 'react-native'
+import { Text,View,StyleSheet, TextInput, TouchableOpacity,  Image} from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import logo from '../../assets/nestone.png'
 export const Signup =({navigation})=>{
@@ -9,7 +9,7 @@ export const Signup =({navigation})=>{
 
     let [email,setEmail]=useState('')
     let [password,setPassword]=useState('')
-    let [pas,setpass]=useState(false)
+    let [pas]=useState(false)
     let onPress1=()=>{
         if(password.length>=9)
         {
@@ -26,41 +26,57 @@ export const Signup =({navigation})=>{
             type:'warning'
         })
     }
-return<KeyboardAvoidingView style={{flex:1}} behavior="height">
-       <View style={styles.Header1}>
+return<View style={styles.Header1}>
             {/* <Text style={styles.TextHeader}>Nest One</Text> */}
             <Image source={logo} style={styles.TextHeader}/>
             <View style={styles.Parent} >
-            <Text style={{marginLeft:15,padding:20,fontSize:25,fontWeight:"normal"}}>Create Account</Text>
-            <Text style={{marginLeft:15,padding:10}}>Enter Email and Password </Text>
+            <Text style={styles.CreAcc}>Create Account</Text>
+            <Text style={styles.EmaPass}>Enter Email and Password </Text>
             <TextInput style={styles.username} onChangeText={value=>setEmail(value)} value={email} placeholder='Email'/>
             <TextInput secureTextEntry={true} style={styles.username} onChangeText={value=>setPassword(value)} value={password} placeholder="Password"/>
-           { pas && <Text style={{color:'red'}}>Should be greater than 8</Text>}
+           { pas && <Text style={styles.red}>Should be greater than 8</Text>}
             <TouchableOpacity style={styles.Signup} disabled={!email && !password} onPress={()=>{onPress1()}}>
-                <Text style={{color:'white'}}>Sign Up</Text>
+                <Text style={styles.white}>Sign Up</Text>
             </TouchableOpacity>
             <View style={styles.Login}>
             <Text>Already Have Account </Text>
-            <TouchableOpacity onPress={()=>{navigation.push('Login')}}><Text style={{color:'blue'}}>Login</Text></TouchableOpacity>
+            <TouchableOpacity onPress={()=>{navigation.push('Login')}}><Text style={styles.blue}>Login</Text></TouchableOpacity>
             </View>
             </View>
        </View>
-    </KeyboardAvoidingView>
+    
 }
 
 const styles = StyleSheet.create({
+    CreAcc:{fontSize:25,fontWeight:"normal",marginLeft:15,padding:20},
+    EmaPass:{marginLeft:15,padding:10},
+    Header1:{
+      alignItems:'center',
+      color:"white",
+      flex:1
+  },
     Login:{
         flex:1,
         flexDirection:'row',
         // alignItems:'flex-start'
     },
     Parent:{
-        // marginTop:40,
+        alignItems:'center',
         flex:1,
-        justifyContent:"flex-start",
-        alignItems:'center'
+        justifyContent:"flex-start"
     },
-     TextHeader:{
+
+    Signup:{
+        backgroundColor:'#3F3F3F',
+        borderRadius:20,
+        color:"white",
+        marginBottom:10,
+        paddingBottom:10,
+        paddingLeft:50,
+        paddingRight:50,
+        paddingTop:10
+     },
+    TextHeader:{
         //  color:"#3F3F3F",
         //  fontSize:50,
         //  marginLeft:20,
@@ -68,25 +84,19 @@ const styles = StyleSheet.create({
          
          
      },
-     username:{
-        width:250,
-        margin:20,
-        borderBottomWidth:1,
-     },
+     blue:{
+        color:'blue'
+    },
+     red:{
+        color:'red'
+    },
 
-     Signup:{
-        paddingLeft:50,
-        borderRadius:20,
-        paddingRight:50,
-        paddingTop:10,
-        paddingBottom:10,
-        backgroundColor:'#3F3F3F',
-        color:"white",
-        marginBottom:10
+     username:{
+        borderBottomWidth:1,
+        margin:20,
+        width:250,
      },
-  Header1:{
-      color:"white",
-      alignItems:'center',
-      flex:1
-  }
+  white:{
+        color:'white'
+    }
 });

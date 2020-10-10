@@ -11,7 +11,12 @@ export class AuthController {
     @Post('signup')
     async signup(
         @Body(ValidationPipe) authCredentialsDto:AuthCredentialsDto):Promise<any>{
-            return await this.authservice.signUp(authCredentialsDto);
+           try{ 
+                let auth= await this.authservice.signUp(authCredentialsDto);
+            return auth
+        }catch(err){
+            throw err
+        }
         }
     @UseGuards(LocalAuthGuard)
     @Post('signin')
@@ -24,9 +29,9 @@ export class AuthController {
             return err
         }
     }
-    @UseGuards(JwtAuthGuard)
-    @Get('me')
-    getme(@Request() req){
-        return req.user
-    }
+    // @UseGuards(JwtAuthGuard)
+    // @Get('me')
+    // getme(@Request() req){
+    //     return req.user
+    // }
 }

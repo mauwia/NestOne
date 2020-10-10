@@ -1,24 +1,24 @@
+/* eslint-disable react-native/sort-styles */
 import * as React from 'react';
 import { Text, View,StyleSheet,Image } from 'react-native';
-import { useDispatch,useSelector,shallowEqual } from 'react-redux'
+import { useSelector,shallowEqual } from 'react-redux'
 
-export default Post=()=> {
+export const Post=()=> {
   const {list}=useSelector(state=>({list:Object.values(state.post).reverse()}),shallowEqual)
 
     return (
       <>
-        {list.length===0 && !hit && <Text style={{color:'white',alignSelf:'center'}}>NO POST YET</Text>}
+        {list.length===0  && <Text style={styles.NoPost}>NO POST YET</Text>}
             {/* {list.length===0 &&  <ActivityIndicator size='large' color='white'/>} */}
             {
                 list.map(post=>{
-                // console.log(post.imagelink)
                     return<>{
                       post.imagelink ==='none' &&
                       <View style={styles.card} key={post._id}>
 
-                <View style={{flexDirection:'row'}}>
+                <View style={styles.ViewFlex}>
                 <Image source={{uri:`${post.userId.imagelink}`}} style={styles.cardImage}></Image>
-                <Text style={{marginTop:20,color:'#008B8B',marginLeft:9}}>{post.userId.username}</Text>
+                <Text style={styles.username}>{post.userId.username}</Text>
                 </View>
               <Text style={styles.Caption}>{post.caption}</Text>
                              
@@ -30,37 +30,68 @@ export default Post=()=> {
   }
 
   let styles=StyleSheet.create({
+    CameraView:{
+        padding:10,
+        paddingTop:20,
+        flexDirection:'row'
+    },
     Caption:{
-        marginHorizontal:35,
-        paddingBottom:20,
+        color:"#008b8b",
         fontSize:20,
+        marginHorizontal:35,
         marginTop:10,
-        color:"#008b8b"
+        paddingBottom:20
 
     },
-    uploadImageParent:{
+    Icon1:{
+        alignSelf:'flex-start',
+        backgroundColor:'white',
         borderRadius:10,
-        alignSelf:'stretch'
+        color:'#008B8B',
+        elevation: 5,
+        fontSize:30,
+        marginHorizontal:20,
+        marginTop:20,
+        paddingBottom:10,
+        paddingLeft:20,
+        paddingRight:20,
+        paddingTop:10,
+        shadowColor: '#470000',
+        shadowOffset: {width: 0, height: 1},
+        shadowOpacity: 1,
     },
-    uploadImage:{
-        // borderRadius:10,
-        width:340,
-        alignSelf:'stretch'
-        // marginLeft:35 ,
-        // padding:40
+    IconPar:{
+        alignSelf:'flex-start'
+    },
+    InputStatus:{
+        backgroundColor:'white',
+        borderRadius:10,
+        margin:20,
+        padding:10
+    },
+    NoPost:{alignSelf:'center',color:'#008b8b'},
+    Parent3:{
+        alignItems:'stretch',
+        backgroundColor:'#008B8B',
+        flex:1,
+        justifyContent:'flex-start',
+
+    },
+    ViewFlex:{
+        flexDirection:'row'
     },
     card:{
-        borderRadius:10,
         backgroundColor:'white',
+        borderRadius:10,
         margin:10,
         paddingBottom:10
     },
     cardImage:{
-        marginTop:10,
-        marginLeft:10,
         borderRadius:30,
-        width:50,
-        height:50
+        height:50,
+        marginLeft:10,
+        marginTop:10,
+        width:50
     },
     cardImage1:{
         // marginTop:10,
@@ -73,44 +104,15 @@ export default Post=()=> {
         borderColor:'#008b8b',
         // width:100
     },
-    CameraView:{
-        padding:10,
-        paddingTop:20,
-        flexDirection:'row'
+    uploadImage:{
+        width:340,
+        alignSelf:'stretch'
+        // marginLeft:35 ,
+        // padding:40
     },
-    InputStatus:{
-        borderRadius:10,
-        // height:10?0,
-        backgroundColor:'white',
-        margin:20,
-        padding:10
+    uploadImageParent:{
+        alignSelf:'stretch',
+        borderRadius:10
     },
-    Parent3:{
-        flex:1,
-        // flexDirection:'row',
-        justifyContent:'flex-start',
-        alignItems:'stretch',
-        backgroundColor:'#008B8B',
-
-    },
-    IconPar:{
-        alignSelf:'flex-start'
-    },
-    Icon1:{
-        color:'#008B8B',
-        alignSelf:'flex-start',
-        backgroundColor:'white',
-        borderRadius:10,
-        fontSize:30,
-        marginTop:20,
-        marginHorizontal:20,
-        paddingLeft:20,
-        paddingRight:20,
-        paddingTop:10,
-        paddingBottom:10,
-        shadowOffset: {width: 0, height: 1},
-        shadowColor: '#470000',
-        shadowOpacity: 1,
-        elevation: 5,
-    }
+    username:{color:'#008B8B',marginLeft:9,marginTop:20}
 })

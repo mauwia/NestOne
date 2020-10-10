@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose'
 import { PassportStrategy } from '@nestjs/passport';
-import { Model, Mongoose } from 'mongoose';
+import { Model } from 'mongoose';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from '../auth.model';
 
@@ -17,10 +17,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     // console.log("In auth strategies", payload)
-    let user=await this.userModel.findOne({username:payload.username})
+   try{
+      let user=await this.userModel.findOne({username:payload.username})
     if(user)
     return { _id: payload.sub, username:user};
     else
       return null
+  }catch(err){
+    throw err
   }
+}
 }
